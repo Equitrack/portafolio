@@ -1,0 +1,19 @@
+# 1. Ignorar la carpeta de binarios de Terraform (ocupa mucho espacio y es instalable)
+**/.terraform/*
+
+# 2. Ignorar el estado de Terraform (CONTIENE SECRETOS Y DATOS SENSIBLES)
+*.tfstate
+*.tfstate.*
+
+# 3. Ignorar archivos de variables sensibles
+# (Si llegas a usar archivos .tfvars para contraseñas)
+*.tfvars
+*.tfvars.json
+
+# 4. Ignorar archivos de logs y temporales
+*.log
+.terraform.lock.hcl
+
+# 5. Ignorar archivos del sistema
+.DS_Store
+Thumbs.db
