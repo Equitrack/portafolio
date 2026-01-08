@@ -1,0 +1,13 @@
+---
+- name: Configurar Almacenamiento en Management Tier
+  hosts: management
+  become: yes
+  roles:
+    - storage
+    - jenkins
+
+- name: Configurar Orquestador (Minikube)
+  hosts: orchestration
+  become: yes
+  roles:
+    - minikube

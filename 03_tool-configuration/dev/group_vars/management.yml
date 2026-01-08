@@ -1,0 +1,2 @@
+ebs_device: "/dev/nvme1n1"
+mount_point: "/var/jenkins_home"

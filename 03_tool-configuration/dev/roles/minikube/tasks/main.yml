@@ -1,0 +1,48 @@
+---
+- name: Instalar dependencias base (aunque el RPM ayude, son buenas prácticas)
+  dnf:
+    name:
+      - conntrack
+      - socat
+    state: present
+
+- name: Descargar e instalar Minikube mediante RPM
+  dnf:
+    name: "https://github.com/kubernetes/minikube/releases/latest/download/minikube-latest.x86_64.rpm"
+    state: present
+    disable_gpg_check: yes
+
+- name: Descargar binario de kubectl
+  get_url:
+    url: "https://dl.k8s.io/release/{{ lookup('pipe', 'curl -L -s https://dl.k8s.io/release/stable.txt') }}/bin/linux/amd64/kubectl"
+    dest: /usr/local/bin/kubectl
+    mode: '0755'
+
+- name: Verificar el estado actual de Minikube
+  command: minikube status
+  register: minikube_output
+  failed_when: false
+  changed_when: false
+  become: yes
+  become_user: ec2-user
+
+- name: Iniciar Minikube con acceso externo y SAN para Jenkins
+  command: >
+    minikube start 
+    --driver=docker 
+    --memory=3072
+    --cpus=2
+    --listen-address=0.0.0.0
+    --apiserver-names=minikube.dev.internal
+    --apiserver-ips={{ ansible_default_ipv4.address }}
+    --ports=8443:8443
+  when: "'Running' not in minikube_output.stdout"
+  become: yes
+  become_user: ec2-user
+
+- name: Configurar permisos del config de Kubernetes
+  file:
+    path: "/home/ec2-user/.kube"
+    owner: ec2-user
+    group: ec2-user
+    recurse: yes

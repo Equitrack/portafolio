@@ -1,0 +1,2 @@
+minikube_memory: 3072
+minikube_cpus: 2
