@@ -15,7 +15,6 @@ module "network" {
 }
 
 # 3. NAT Instance
-
 module "nat_instance" {
   source                 = "../modules/nat_instance"
   vpc_id                 = module.network.vpc_id
@@ -54,6 +53,17 @@ module "app_instances" {
   private_subnet_id = module.network.private_subnet_id
   bastion_sg_id     = module.bastion.sg_id
   key_name          = aws_key_pair.deployer.key_name
-  ami_id           = "ami-00e428798e77d38d9"
+  ami_id            = "ami-00e428798e77d38d9"
   env               = "dev"
+}
+
+# 6. DNS - DEV
+module "dns" {
+  source          = "../modules/dns"
+  vpc_id          = module.network.vpc_id
+  domain_name     = "dev.internal"
+  instance_map    = {
+    "jenkins"       = module.app_instances.jenkins_private_ip
+    "minikube"      = module.app_instances.minikube_private_ip
+  }
 }

@@ -24,4 +24,8 @@ resource "aws_instance" "bastion" {
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
   tags                   = { Name = "${var.env}-bastion-host" }
+  user_data = <<-EOF
+              #!/bin/bash
+              hostnamectl set-hostname bastion
+              EOF
 }

@@ -1,3 +1,7 @@
-output "private_ip" {
-  value = aws_instance.app_server.private_ip
+output "jenkins_private_ip" {
+  value = aws_instance.jenkins.private_ip
+}
+
+output "minikube_private_ip" {
+  value = aws_instance.minikube.private_ip
 }
