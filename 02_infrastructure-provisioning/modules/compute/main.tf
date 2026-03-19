@@ -49,6 +49,29 @@ resource "aws_instance" "minikube" {
               EOF
 }
 
+resource "aws_instance" "kubespray" {
+  ami                    = var.ami_id_almalinux
+  instance_type          = "c7i-flex.large"
+  subnet_id              = var.private_subnet_id
+  key_name               = var.key_name
+  vpc_security_group_ids = [aws_security_group.private_sg.id]
+  tags                   = { Name = "${var.env}-kubespray" }
+}
+
+# EBS - Kubespray data
+resource "aws_ebs_volume" "kubespray_data" {
+  availability_zone = "us-east-2a"
+  size              = 50
+  type              = "gp3"
+  tags = { Name = "${var.env}-kubespray-data" }
+}
+
+resource "aws_volume_attachment" "kubespray_data_att" {
+  device_name = "/dev/sdi"
+  volume_id   = aws_ebs_volume.kubespray_data.id
+  instance_id = aws_instance.kubespray.id
+}
+
 # EBS - Jenkins data
 resource "aws_ebs_volume" "jenkins_data" {
   availability_zone = "us-east-2a"

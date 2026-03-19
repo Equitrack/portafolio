@@ -1,7 +1,7 @@
 # 1. Llave SSH (Global para el entorno)
 resource "aws_key_pair" "deployer" {
   key_name   = "SSH-PUB-KEY"
-  public_key = file("~/.ssh/id_rsa.pub")
+  public_key = file("~/.ssh/seguritech_rsakey.pub")
 }
 
 # 2. Red Base (VPC, Subnets, IGW)
@@ -54,6 +54,7 @@ module "app_instances" {
   bastion_sg_id     = module.bastion.sg_id
   key_name          = aws_key_pair.deployer.key_name
   ami_id            = "ami-00e428798e77d38d9"
+  ami_id_almalinux  = "ami-0619bbf23beca128d"
   env               = "dev"
 }
 
@@ -65,5 +66,6 @@ module "dns" {
   instance_map    = {
     "jenkins"       = module.app_instances.jenkins_private_ip
     "minikube"      = module.app_instances.minikube_private_ip
+    "kubespray"     = module.app_instances.kubespray_private_ip
   }
 }

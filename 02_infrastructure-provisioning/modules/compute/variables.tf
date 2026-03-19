@@ -3,4 +3,5 @@ variable "private_subnet_id" {}
 variable "bastion_sg_id" {}
 variable "key_name" {}
 variable "ami_id" {}
+variable "ami_id_almalinux" {}
 variable "env" {}
