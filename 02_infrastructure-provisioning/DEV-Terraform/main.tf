@@ -40,7 +40,7 @@ module "bastion" {
   source           = "../modules/bastion"
   vpc_id           = module.network.vpc_id
   public_subnet_id = module.network.public_subnet_id
-  allowed_ip       = "189.149.43.121/32"
+  allowed_ip       = "189.234.101.3/32"
   key_name         = aws_key_pair.deployer.key_name
   ami_id           = "ami-00e428798e77d38d9"
   env              = "dev"

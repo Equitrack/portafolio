@@ -51,7 +51,7 @@ resource "aws_instance" "minikube" {
 
 # EBS - Jenkins data
 resource "aws_ebs_volume" "jenkins_data" {
-  availability_zone = aws_instance.jenkins.availability_zone
+  availability_zone = "us-east-2a"
   size              = 10
   type              = "gp3"
   tags = { Name = "${var.env}-jenkins-data" }
